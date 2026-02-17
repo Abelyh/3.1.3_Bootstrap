@@ -1,0 +1,158 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>User information-page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap 5.3.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: #f8f9fa;
+        }
+
+        /* Навбар */
+        .navbar {
+            flex-shrink: 0;
+            height: 56px;
+        }
+
+        /* Основной контейнер */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Боковая панель (белая) */
+        .sidebar {
+            background-color: white;
+            border-right: 1px solid #dee2e6;
+            min-height: 100%;
+        }
+
+        /* Ссылки в панели */
+        .sidebar .nav-link {
+            border-radius: 0;
+            padding: 12px 20px;
+            color: #333;
+            border-left: 4px solid transparent;
+        }
+
+        /* АКТИВНАЯ ссылка (синяя) */
+        .sidebar .nav-link.active {
+            background-color: #0d6efd; /* Синий фон */
+            color: white !important; /* Белый текст */
+            font-weight: bold;
+            border-left: 4px solid #0a58ca; /* Темно-синяя граница */
+        }
+
+        .sidebar .nav-link:hover:not(.active) {
+            background-color: #f8f9fa;
+        }
+
+        /* Правая часть */
+        .content-area {
+            overflow-y: auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Верхнее меню -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span class="navbar-text text-white">
+            <strong th:text="${user.email}"></strong>
+            with roles:
+            <!-- Отображение списка ролей через запятую -->
+            <span th:each="role, roleStat : ${user.roles}">
+                <span th:text="${role.name}"></span>
+                <span th:if="${not roleStat.last}">, </span>
+            </span>
+        </span>
+        <a th:href="@{/logout}" class="text-white text-decoration-none">Logout</a>
+    </div>
+</nav>
+
+<!-- Основной контент -->
+<div class="container-fluid main-content">
+    <div class="row flex-grow-1">
+        <!-- Левая СИНЯЯ панель -->
+        <nav class="col-12 col-sm-3 col-md-2 sidebar d-flex flex-column p-0">
+            <div class="nav flex-column nav-pills flex-grow-1 pt-3">
+
+                <!-- Ссылка на Admin - только для ADMIN -->
+                <a class="nav-link"
+                   th:href="@{/admin}"
+                   th:classappend="${currentPage == 'admin'} ? 'active' : ''"
+                   sec:authorize="hasRole('ADMIN')">
+                    <i class="bi bi-shield-lock me-2"></i>Admin
+                </a>
+
+                <!-- Ссылка на User - для всех -->
+                <a class="nav-link"
+                   th:href="@{/user}"
+                   th:classappend="${currentPage == 'user'} ? 'active' : ''">
+                    <i class="bi bi-person me-2"></i>User
+                </a>
+            </div>
+        </nav>
+
+        <!-- Правая часть (контент) -->
+        <main class="col-12 col-sm-9 col-md-10 content-area">
+            <h1 class="h2 mb-4">User information-page</h1>
+
+            <div class="card">
+                <div class="card-header">
+                    About user
+                </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0 table-layout-fixed">
+
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.firstName}"></td>
+                            <td th:text="${user.lastName}"></td>
+                            <td th:text="${user.age}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td>
+                            <span th:each="role, roleStat : ${user.roles}">
+                             <span th:text="${role.name}"></span>
+                             <span th:if="${not roleStat.last}">, </span>
+                            </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
