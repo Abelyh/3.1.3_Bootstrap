@@ -28,7 +28,7 @@ public class UserController {
         User user = service.findByEmail(email);
         model.addAttribute("user", user);
         model.addAttribute("currentPage", "user");
-        return "user";
+        return "user-page";
     }
 
     @GetMapping("/login")

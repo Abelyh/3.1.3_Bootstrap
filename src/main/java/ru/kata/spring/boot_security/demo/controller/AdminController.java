@@ -31,7 +31,7 @@ public class AdminController {
         //для подсветки меню
         model.addAttribute("currentPage", "admin");
 
-        return "getAll";
+        return "admin-page";
     }
 
     @PostMapping("/create")
