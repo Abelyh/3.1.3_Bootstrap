@@ -51,10 +51,7 @@ public class UserServiceImpl implements UserService {
         userById.setEmail(updateUser.getEmail());
         Set<Role> roles = roleService.findAllById(roleIds);
         userById.setRoles(roles);
-        if (!updateUser.getPassword().isEmpty()) {// если поле не заполнено, вернется пустая строка
-            userById.setPassword(passwordEncoder.encode(updateUser.getPassword()));
-        }
-
+        userById.setPassword(passwordEncoder.encode(updateUser.getPassword()));
         userRepository.save(userById);
     }
 

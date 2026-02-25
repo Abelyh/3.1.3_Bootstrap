@@ -1,9 +1,12 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
@@ -14,24 +17,45 @@ import java.util.List;
 public class AdminController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
 
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
+//    @GetMapping
+//    public String getAll(Model model, @AuthenticationPrincipal User currentUser) {
+//        // Текущий пользователь для шапки
+//        model.addAttribute("user", currentUser);
+//        // актуальный список ролей из базы
+//        model.addAttribute("allRoles", roleService.findAll());
+//        // Все пользователи для таблицы
+//        model.addAttribute("users", userService.getAll());
+//        //для подсветки меню
+//        model.addAttribute("currentPage", "admin");
+//
+//        return "admin-page";
+//    }
+
     @GetMapping
-    public String getAll(Model model, Principal principal) {
+    public String getAll(Model model, @AuthenticationPrincipal User currentUser) {
         // Текущий пользователь для шапки
-        String email = principal.getName();
-        User currentUser = userService.findByEmail(email);
         model.addAttribute("user", currentUser);
+        // актуальный список ролей из базы
+        model.addAttribute("allRoles", roleService.findAll());
         // Все пользователи для таблицы
         model.addAttribute("users", userService.getAll());
         //для подсветки меню
         model.addAttribute("currentPage", "admin");
 
         return "admin-page";
+    }
+
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable("id") Long id) {
+        return userService.findById(id);
     }
 
     @PostMapping("/create")
@@ -54,4 +78,13 @@ public class AdminController {
         userService.delete(id);
         return "redirect:/admin";
     }
+
+    @GetMapping("/admin/edit/{id}")
+    public String editUserForm(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("allRoles", roleService.findAll());
+        return "edit-user"; // отдельная страница редактирования
+    }
+
+
 }

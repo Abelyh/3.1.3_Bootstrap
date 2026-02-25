@@ -4,29 +4,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class UserController {
 
-    private final UserService service;
+    private final UserService userService;
 
 
     @Autowired
-    public UserController(UserService service) {
-        this.service = service;
+    public UserController(UserService userService) {
+        this.userService = userService;
 
     }
 
     @GetMapping("/user")
     public String getUserProfile(Model model, Principal principal) {
         String email = principal.getName();
-        User user = service.findByEmail(email);
+        User user = userService.findByEmail(email);
         model.addAttribute("user", user);
+        //для подсветки меню
         model.addAttribute("currentPage", "user");
         return "user-page";
     }

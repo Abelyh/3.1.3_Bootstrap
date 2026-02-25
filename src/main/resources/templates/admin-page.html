@@ -173,6 +173,7 @@
                                                 th:data-lastName="${u.lastName}"
                                                 th:data-age="${u.age}"
                                                 th:data-email="${u.email}"
+                                                th:data-password="${u.password}"
                                                 th:data-roles="${#strings.listJoin(u.roles.![name], ', ')}">
                                             Edit
                                         </button>
@@ -248,9 +249,11 @@
                             <!-- Role -->
                             <div class="mb-3">
                                 <label for="roleSelect" class="form-label text-center w-100 fw-bold">Role</label>
-                                <select class="form-select" id="roleSelect" name="roleIds" multiple size="2">
-                                    <option value="1">ADMIN</option>
-                                    <option value="2">USER</option>
+                                <select class="form-select" id="roleSelect" name="roleIds" multiple>
+                                    <option th:each="role : ${allRoles}"
+                                            th:value="${role.id}"
+                                            th:text="${role.name}">
+                                    </option>
                                 </select>
                                 <div class="form-text text-muted">Удерживайте Ctrl для выбора нескольких ролей</div>
                             </div>
@@ -279,6 +282,7 @@
                             </div>
                             <div class="modal-body">
                                 <form th:action="@{/admin/update}" method="post" id="editUserForm">
+<!--                                    <input type="hidden" name="currentPassword" id="currentPassword">-->
                                     <!-- User ID (только для просмотра) -->
                                     <div class="mb-3 text-center">
                                         <label for="editUserId" class="form-label text-center w-100 fw-bold mb-0">ID</label>
@@ -325,14 +329,14 @@
                                                id="editPassword" name="password">
                                     </div>
 
-                                    <!-- Role -->
+                                    <!-- Roles -->
                                     <div class="mb-3 text-center">
-                                        <label for="selectRole"
-                                               class="form-label text-center w-100 fw-bold mb-0">Role</label>
-                                        <select class="form-select form-select-sm w-50 mx-auto" id="selectRole"
-                                                name="roleIds" multiple size="2">
-                                            <option value="1">ADMIN</option>
-                                            <option value="2">USER</option>
+                                        <label for="selectRole" class="form-label text-center w-100 fw-bold mb-0">Role</label>
+                                        <select class="form-select form-select-sm w-50 mx-auto" id="selectRole" name="roleIds" multiple>
+                                            <option th:each="role : ${allRoles}"
+                                                    th:value="${role.id}"
+                                                    th:text="${role.name}">
+                                            </option>
                                         </select>
                                     </div>
                                 </form>
@@ -425,12 +429,15 @@
                                 const userAge = this.getAttribute('data-age');
                                 const userEmail = this.getAttribute('data-email');
                                 const userRoles = this.getAttribute('data-roles');
+                                const userPassword = this.getAttribute('data-password');
+
 
                                 document.getElementById('editUserId').value = userId;
                                 document.getElementById('editFirstName').value = userName;
                                 document.getElementById('editLastName').value = userLastName;
                                 document.getElementById('editAge').value = userAge;
                                 document.getElementById('editEmail').value = userEmail;
+                                document.getElementById('editPassword').value = userPassword;
 
                                 // ОБРАБОТКА РОЛЕЙ
                                 if (userRoles) {

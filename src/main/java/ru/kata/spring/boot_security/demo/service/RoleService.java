@@ -10,4 +10,5 @@ public interface RoleService {
 
     Set<Role> findAllById(List<Long> id);
 
+    List<Role> findAll();
 }
