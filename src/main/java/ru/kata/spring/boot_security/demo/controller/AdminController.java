@@ -65,12 +65,4 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editUserForm(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.findById(id));
-        model.addAttribute("allRoles", roleService.findAll());
-        return "edit-user"; // отдельная страница редактирования
-    }
-
-
 }
