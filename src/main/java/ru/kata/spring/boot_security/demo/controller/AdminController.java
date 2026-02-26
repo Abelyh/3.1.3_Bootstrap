@@ -25,20 +25,6 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-//    @GetMapping
-//    public String getAll(Model model, @AuthenticationPrincipal User currentUser) {
-//        // Текущий пользователь для шапки
-//        model.addAttribute("user", currentUser);
-//        // актуальный список ролей из базы
-//        model.addAttribute("allRoles", roleService.findAll());
-//        // Все пользователи для таблицы
-//        model.addAttribute("users", userService.getAll());
-//        //для подсветки меню
-//        model.addAttribute("currentPage", "admin");
-//
-//        return "admin-page";
-//    }
-
     @GetMapping
     public String getAll(Model model, @AuthenticationPrincipal User currentUser) {
         // Текущий пользователь для шапки
