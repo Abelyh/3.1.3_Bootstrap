@@ -39,11 +39,6 @@ public class AdminController {
         return "admin-page";
     }
 
-    @GetMapping("/users/{id}")
-    public User getUser(@PathVariable("id") Long id) {
-        return userService.findById(id);
-    }
-
     @PostMapping("/create")
     public String createUserAccount(@ModelAttribute("user") User user,
                                     @RequestParam("roleIds") List<Long> roleIds) {
