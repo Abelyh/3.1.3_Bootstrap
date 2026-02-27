@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -51,7 +52,9 @@ public class UserServiceImpl implements UserService {
         userById.setEmail(updateUser.getEmail());
         Set<Role> roles = roleService.findAllById(roleIds);
         userById.setRoles(roles);
-        userById.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+        if (!updateUser.getPassword().isEmpty()) {
+            userById.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+        }
         userRepository.save(userById);
     }
 

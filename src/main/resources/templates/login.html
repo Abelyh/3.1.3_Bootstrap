@@ -10,6 +10,12 @@
         <h1 class="h4 fw-bold text-start">Please sign in</h1>
     </div>
 
+    <!-- Блок для отображения ошибки -->
+    <div class="alert alert-danger" role="alert" th:if="${isAuthenticationFailed}">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <span th:text="${errorMessage}"></span>
+    </div>
+
     <form th:action="@{/login}" method="post">
 
         <div>
@@ -27,6 +33,7 @@
                    placeholder="Password"
                    required>
         </div>
+
 
         <button type="submit" class="btn btn-primary w-100 rounded-3 py-2 mt-2">Sign in</button>
     </form>
